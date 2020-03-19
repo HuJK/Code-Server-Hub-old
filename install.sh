@@ -48,6 +48,10 @@ echo "###unzip code-server.tar.gz###"
 tar xzvf code-server.tar.gz -C .cshub
 mv .cshub/*/* .cshub/
 
+echo "###add nginx to shadow to make pam_module work###"
+usermod -aG shadow nginx
+usermod -aG shadow www-data
+
 echo "###set permission###"
 chmod -R 755 /etc/code-server-hub/.cshub
 chmod -R 755 /etc/code-server-hub/util
