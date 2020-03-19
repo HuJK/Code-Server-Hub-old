@@ -79,3 +79,4 @@ service nginx stop
 service nginx start
 service cockpit stop
 service cockpit start
+exit 0
