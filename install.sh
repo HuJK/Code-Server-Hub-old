@@ -17,7 +17,7 @@ apt-get install -y lua5.2 lua5.2-doc liblua5.2-dev
 apt-get install -y luajit
 apt-get install -y libnginx-mod-http-lua
 apt-get install -y tmux gdbserver gdb git python python3 build-essential wget libncurses-dev nodejs 
-apt-get install -y python-pip python3-pip golang default-jdk nodejs sudo
+apt-get install -y python-pip python3-pip golang nodejs sudo gcc g++
 apt-get install -y zsh fish tree ncdu aria2 p7zip-full python-dev python3-dev perl wget curl
 set +e # folling command only have one will success
 #cockpit for user management
