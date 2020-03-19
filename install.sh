@@ -24,12 +24,17 @@ set +e # folling command only have one will success
 apt-get install -y -t bionic-backports cockpit cockpit-pcp #for ubuntu 18.04
 apt-get install -y cockpit cockpit-pcp                     #for ubuntu 19.04
 set -e
-pip3 install setuptools
+pip3 install setuptools pexpect
 pip install  setuptools
 
 echo "###doenload files###"
 cd /etc
 git clone https://github.com/HuJK/Code-Server-Hub.git code-server-hub
+
+
+cd /etc/code-server-hub
+mv code /etc/nginx/sites-available/
+ln -s ../sites-available/code /etc/nginx/sites-enabled/
 
 echo "###doenload latest code-server###"
 curl -s https://api.github.com/repos/cdr/code-server/releases/latest \
