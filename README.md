@@ -17,7 +17,7 @@ Run this in terminal
 
 ```sudo sh -c "$(wget -O- https://raw.githubusercontent.com/HuJK/Code-Server-Hub/master/install.sh)"```
 
-And goto url : [https://your_server_ip:8443](https://your_server_ip:8443)
+And goto url : https://\[your_server_ip\]:8443
 
 Demo:
 [https://cshub.whojk.com:8443](https://cshub.whojk.com:8443)
