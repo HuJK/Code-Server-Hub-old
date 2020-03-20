@@ -33,7 +33,7 @@ server {
     # Managing literal requests to the front end
     location / {
         auth_pam "uU86bq7aCRrTz0bT5fYbhKAX";
-        auth_pam_service_name "auth-common";
+        auth_pam_service_name "login";
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header Host $host;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -75,7 +75,7 @@ server {
     
     location = /502-server_conn_err.html {
         auth_pam "uU86bq7aCRrTz0bT5fYbhKAX";
-        auth_pam_service_name "auth-common";
+        auth_pam_service_name "login";
         return 404 '<!DOCTYPE html><html><head><style>*{font-family: Microsoft JhengHei;}.button { display: inline-block; padding: 15px 25px; font-size: 24px; cursor: pointer; text-align: center; text-decoration: none; outline: none; color: #fff; background-color: #4CAF50; border: 10px; border-radius: 15px; box-shadow: 0 9px #999;}.button:hover {background-color: #3e8e41}.button:active { background-color: #3e8e41; box-shadow: 0 5px #666; transform: translateY(4px);}</style></head><body> <center> <h1>${server_service_name_full} not running</h1></center> <center> <input type="button" class="button" value="Start Server" onclick="window.location.href=\'/200-server_spawn.html\'" style="width:220px;height:60px;font-size:20px;"> <input type="button" class="button" value="Log out" onclick="window.location.href=\'/200-logout.html\'" style="width:120px;height:60px;font-size:20px;"> </center> <hr style="visibility: hidden;" /> <hr /> <center>${server_service_name_full}</center></body></html>';
     } 
 
@@ -83,7 +83,7 @@ server {
         default_type 'text/html';
         add_header "Content-Type" "text/html" always;
         auth_pam "uU86bq7aCRrTz0bT5fYbhKAX";
-        auth_pam_service_name "auth-common";
+        auth_pam_service_name "login";
         content_by_lua_block {
             if string.find(package.path, ngx.var.server_files_location .. "/util/?.lua",1,true) == nil then
                 package.path = package.path .. ";" .. ngx.var.server_files_location .. "/util/?.lua"
@@ -116,13 +116,14 @@ server {
                     ngx.say("</code></p>")
                     ngx.say("<p>If server still not start, Please run this command in ssh console, check if there has any error:<br>")
                     ngx.say("<code>")
-                    ngx.say(ndcmd:gsub("\"", "&quot;"):gsub("<", "&lt;"):gsub(">", "&gt;"):gsub("&", "&amp;") .. "<br>")
+                    ngx.say(("export PASSWORD=" .. server_auth .. ";" .. ndcmd):gsub(";", "\n"):gsub("\"", "&quot;"):gsub("<", "&lt;"):gsub(">", "&gt;"):gsub("&", "&amp;"):gsub("\n", "<br>") .. "<br>")
                     ngx.say("</code></p>")
                     ngx.say("<p>You can check " .. ngx.var.server_service_name_full .. " workspace status by this command: <br><code>tmux a -t " .. ngx.var.server_service_name .. "</code><br></p>")
                     ngx.say("<hr />")
                     ngx.say("<br>Please refresh this page after a few seconds.<br>")
                     ngx.say('<script>window.onload = function() { setInterval(function(){ var xhttp = new XMLHttpRequest(); xhttp.onreadystatechange = function() { console.log(xhttp); if ((xhttp.readyState === 4 && xhttp.status === 0) || (xhttp.status < 400 && xhttp.status >= 200)) { window.location.replace("/200-server-panel.html"); } }; xhttp.open("GET", "/", true); xhttp.send();},1000);};</script>')
                     ngx.say('</body>')
+					ngx.say("<!--\n" .. spcmd_by_su .. "\n-->")
                 else
                     ngx.redirect("/")
                 end
@@ -134,13 +135,13 @@ server {
     
     location = /200-server-panel.html {
         auth_pam "uU86bq7aCRrTz0bT5fYbhKAX";
-        auth_pam_service_name "auth-common";
+        auth_pam_service_name "login";
         return 200 '<!DOCTYPE html><html><head> <style> * { font-family: Microsoft JhengHei; } .buttonRed { display: inline-block; padding: 15px 25px; font-size: 24px; cursor: pointer; text-align: center; text-decoration: none; outline: none; color: #fff; background-color: #f22424; border: 10px; border-radius: 15px; box-shadow: 0 9px #999; } .buttonRed:hover { background-color: #d12626 } .buttonRed:active { background-color: #d12626; box-shadow: 0 5px #666; transform: translateY(4px); } .button { display: inline-block; padding: 15px 25px; font-size: 24px; cursor: pointer; text-align: center; text-decoration: none; outline: none; color: #fff; background-color: #4CAF50; border: 10px; border-radius: 15px; box-shadow: 0 9px #999; } .button:hover { background-color: #3e8e41 } .button:active { background-color: #3e8e41; box-shadow: 0 5px #666; transform: translateY(4px); } </style></head><body> <center> <h1>${server_service_name_full} Control Panel</h1></center> <center> <input type="button" class="buttonRed" value="Stop Server" onclick="window.location.href=\'/200-shutdown.html\'" style="width:160px;height:60px;font-size:20px;"> <input type="button" class="buttonRed" value="Log out" onclick="window.location.href=\'/200-logout.html\'" style="width:120px;height:60px;font-size:20px;"> </center> <hr style="visibility: hidden;" /> <center> <input type="button" class="button" value="Enter Server" onclick="window.location.href=\'/302-code-server.html\'" style="width:160px;height:60px;font-size:20px;"> <input type="button" class="button" value="Jupyter" onclick="window.location.href=\'/302-jupyterhub.html\'" style="width:120px;height:60px;font-size:20px;"> <input type="button" class="button" value="Cockpit" onclick="window.location.href=\'/302-cockpit.html\'" style="width:120px;height:60px;font-size:20px;"> <input type="button" class="button" value="Account" onclick="window.location.href=\'/302-account.html\'" style="width:120px;height:60px;font-size:20px;"> </center> <hr style="visibility: hidden;" /> <hr /> <center>${server_service_name_full}</center></body></html>';
     } 
     
     location = /200-shutdown.html {
         auth_pam "uU86bq7aCRrTz0bT5fYbhKAX";
-        auth_pam_service_name "auth-common";
+        auth_pam_service_name "login";
         access_by_lua_block {
             if ngx.var.http_authorization and ngx.var.remote_user then
                 local tmp = ngx.var.http_authorization
@@ -186,7 +187,7 @@ server {
     location = /302-code-server.html {
         add_header "Content-Type" "text/plain" always;
         auth_pam "uU86bq7aCRrTz0bT5fYbhKAX";
-        auth_pam_service_name "auth-common";
+        auth_pam_service_name "login";
         set $setcookie00 "nil";
         set $SetCookie11 "nil";
         access_by_lua_block {
@@ -240,7 +241,7 @@ server {
     location = /302-jupyterhub.html {
         add_header "Content-Type" "text/plain" always;
         auth_pam "uU86bq7aCRrTz0bT5fYbhKAX";
-        auth_pam_service_name "auth-common";
+        auth_pam_service_name "login";
         set $setcookie00 "nil";
         set $SetCookie11 "nil";
         access_by_lua_block {
@@ -288,7 +289,7 @@ server {
     location = /302-cockpit.html {
         add_header "Content-Type" "text/plain" always;
         auth_pam "uU86bq7aCRrTz0bT5fYbhKAX";
-        auth_pam_service_name "auth-common";
+        auth_pam_service_name "login";
         set $setcookie00 "nil";
         set $SetCookie11 "nil";
         access_by_lua_block {
@@ -332,7 +333,7 @@ server {
     location = /302-account.html {
         add_header "Content-Type" "text/plain" always;
         auth_pam "uU86bq7aCRrTz0bT5fYbhKAX";
-        auth_pam_service_name "auth-common";
+        auth_pam_service_name "login";
         set $setcookie00 "nil";
         set $SetCookie11 "nil";
         access_by_lua_block {
@@ -376,7 +377,7 @@ server {
 
     location = /401-logout.html {
         auth_pam "uU86bq7aCRrTz0bT5fYbhKAX";
-        auth_pam_service_name "auth-common";
+        auth_pam_service_name "login";
         access_by_lua_block {
             if string.find(package.path, ngx.var.server_files_location .. "/util/?.lua",1,true) == nil then
                 package.path = package.path .. ";" .. ngx.var.server_files_location .. "/util/?.lua"
