@@ -325,7 +325,7 @@ server {
                 ngx.redirect(ngx.var.cockpit_addr .. "/system")
             else
                 ngx.status = 404
-                ngx.say("Connect to jupyterhub failed.")
+                ngx.say("Connect to cockpit failed.")
             end
         }
     }
@@ -369,7 +369,7 @@ server {
                 ngx.redirect(ngx.var.cockpit_addr .. "/users#/" .. ngx.var.remote_user)
             else
                 ngx.status = 404
-                ngx.say("Connect to jupyterhub failed.")
+                ngx.say("Connect to cockpit failed.")
             end
         }
     }
