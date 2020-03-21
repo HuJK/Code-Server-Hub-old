@@ -70,7 +70,6 @@ chmod 600 /etc/code-server-hub/cert
 cd /etc/code-server-hub/cert
 openssl genrsa -out ssl.key 2048
 openssl req -new -x509 -key ssl.key -out ssl.pem -days 3650 -subj /CN=localhost
-cat ssl.pem ssl.key > /etc/cockpit/ws-certs.d/0-self-signed.cert
 
 echo "###restart nginx and cockpit###"
 systemctl enable nginx
