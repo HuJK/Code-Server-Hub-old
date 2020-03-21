@@ -20,7 +20,7 @@ Run this in terminal
 And goto url : https://\[your_server_ip\]:8443
 
 Demo:
-[https://cshub.whojk.com/](https://cshub.whojk.com/)
+[https://us.vm.whojk.com/](https://us.vm.whojk.com/)
 
 user|passwd
 ------|---------
