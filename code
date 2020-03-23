@@ -185,7 +185,7 @@ server {
     }
 
     location = /302-code-server.html {
-        add_header "Content-Type" "text/plain" always;
+        add_header "Content-Type" "text/html" always;
         auth_pam "uU86bq7aCRrTz0bT5fYbhKAX";
         auth_pam_service_name "login";
         set $setcookie00 "nil";
@@ -230,16 +230,16 @@ server {
             tmp = ngx.decode_base64(tmp)
             remote_user     = tmp:sub(0,tmp:find(":")-1)
             if ngx.var.setcookie00 ~= "nil" or ngx.var.setcookie11 ~= "nil" then
-                ngx.redirect("/")
+                ngx.say('<!DOCTYPE html><html><body><script>setTimeout(function(){document.homepage.submit();},100);</script><p>Retrieve cookie success.<br/>Redirect to ' .. "/" .. ' after 0.1 seconds.</p><form name="homepage" action="' .. "/" .. '" method="get"></form></body></html>')
             else
                 ngx.status = 404
-                ngx.redirect("/200-server_spawn.html")
+				ngx.say('<!DOCTYPE html><html><body><script>setTimeout(function(){document.homepage.submit();},100);</script><p>Retrieve cookie failed.<br/>Redirect to ' .. "/200-server_spawn.html" .. ' to try again after 0.1 seconds.</p><form name="homepage" action="' .. "/200-server_spawn.html" .. '" method="get"></form></body></html>')
             end
         }
     }
 
     location = /302-jupyterhub.html {
-        add_header "Content-Type" "text/plain" always;
+        add_header "Content-Type" "text/html" always;
         auth_pam "uU86bq7aCRrTz0bT5fYbhKAX";
         auth_pam_service_name "login";
         set $setcookie00 "nil";
@@ -278,16 +278,16 @@ server {
             tmp = ngx.decode_base64(tmp)
             remote_user     = tmp:sub(0,tmp:find(":")-1)
             if ngx.var.setcookie00 ~= "nil" or ngx.var.setcookie11 ~= "nil" then
-                ngx.redirect(ngx.var.jupyter_addr .. "/hub/")
+				ngx.say('<!DOCTYPE html><html><body><script>setTimeout(function(){document.homepage.submit();},100);</script><p>Retrieve cookie success.<br/>Redirect to ' .. ngx.var.jupyter_addr .. "/hub/" .. ' after 0.1 seconds.</p><form name="homepage" action="' .. ngx.var.jupyter_addr .. "/hub/" .. '" method="get"></form></body></html>')
             else
                 ngx.status = 404
-                ngx.say("Connect to jupyterhub failed.")
+                ngx.say("Unable to connect to " .. ngx.var.jupyter_addr_internal)
             end
         }
     }
 
     location = /302-cockpit.html {
-        add_header "Content-Type" "text/plain" always;
+        add_header "Content-Type" "text/html" always;
         auth_pam "uU86bq7aCRrTz0bT5fYbhKAX";
         auth_pam_service_name "login";
         set $setcookie00 "nil";
@@ -322,16 +322,16 @@ server {
         }
         content_by_lua_block {
             if ngx.var.setcookie00 ~= "nil" or ngx.var.setcookie11 ~= "nil" then
-                ngx.redirect(ngx.var.cockpit_addr .. "/system")
+                ngx.say('<!DOCTYPE html><html><body><script>setTimeout(function(){document.homepage.submit();},100);</script><p>Retrieve cookie success.<br/>Redirect to ' .. ngx.var.cockpit_addr .. "/system" .. ' after 0.1 seconds.</p><form name="homepage" action="' .. ngx.var.cockpit_addr .. "/system" .. '" method="get"></form></body></html>')
             else
                 ngx.status = 404
-                ngx.say("Connect to cockpit failed.")
+                ngx.say("Unable to connect to " .. ngx.var.cockpit_addr_internal)
             end
         }
     }
     
     location = /302-account.html {
-        add_header "Content-Type" "text/plain" always;
+        add_header "Content-Type" "text/html" always;
         auth_pam "uU86bq7aCRrTz0bT5fYbhKAX";
         auth_pam_service_name "login";
         set $setcookie00 "nil";
@@ -366,10 +366,10 @@ server {
         }
         content_by_lua_block {
             if ngx.var.setcookie00 ~= "nil" or ngx.var.setcookie11 ~= "nil" then
-                ngx.redirect(ngx.var.cockpit_addr .. "/users#/" .. ngx.var.remote_user)
+				ngx.say('<!DOCTYPE html><html><body><script>setTimeout(function(){document.homepage.submit();},100);</script><p>Retrieve cookie success.<br/>Redirect to ' .. ngx.var.cockpit_addr .. "/users#/" .. ' after 0.1 seconds.</p><form name="homepage" action="' .. ngx.var.cockpit_addr .. "/users#/" .. '" method="get"></form></body></html>')
             else
                 ngx.status = 404
-                ngx.say("Connect to cockpit failed.")
+                ngx.say("Unable to connect to " .. ngx.var.cockpit_addr_internal)
             end
         }
     }
