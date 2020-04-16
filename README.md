@@ -6,7 +6,7 @@ Each user has one workspace, login with your **linux account** and password.
 If you want add user, type ```sudo adduser``` in command line. Make sure you are a sudoer.
 
 ## What is this
-This is an nginx reverse proxy config which will try to authenticate user:password with linux pam module ,and try to execute command to spawn a cloud9 workspace by that user, and then proxy_pass to it.
+This is an nginx reverse proxy config which will try to authenticate user:password with linux pam module ,and try to execute command to spawn a code-server workspace by that user, and then proxy_pass to it.
 
 ## All in one Script for Ubuntu 18.04
 **Warning:** This script will reinstall your nginx and npm.
