@@ -13,7 +13,7 @@ server {
     ssl_certificate     '/etc/code-server-hub/cert/ssl.pem';
     ssl_certificate_key '/etc/code-server-hub/cert/ssl.key';
     server_name default_server;
-    
+    # Managing requests to verify letsencrypt host
     location /.well-known {
         alias /var/www/html/.well-known;
     }
@@ -419,9 +419,4 @@ server {
         return 200 '<!DOCTYPE html><html><body><script>setTimeout(function(){document.homepage.submit();},100);</script><p>Logout. Back to homepage after 0.1 seconds.</p><form name="homepage" action="/" method="get"></form></body></html>';
     }
 
-
-    # Managing requests to verify letsencrypt host
-    location ~ /.well-known {
-        allow all;
-    }
 }
