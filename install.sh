@@ -29,7 +29,7 @@ git clone https://github.com/HuJK/Code-Server-Hub.git code-server-hub
 
 
 cd /etc/code-server-hub
-mkdir .cshub
+mkdir -p .cshub
 mv code /etc/nginx/sites-available/
 ln -s ../sites-available/code /etc/nginx/sites-enabled/
 
