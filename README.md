@@ -8,7 +8,7 @@ If you want add user, type ```sudo adduser``` in command line. Make sure you are
 ## What is this
 This is an nginx reverse proxy config which will try to authenticate user:password with linux pam module ,and try to execute command to spawn a code-server workspace by that user, and then proxy_pass to it.
 
-## All in one Script for Ubuntu 18.04
+## All in one Script for Ubuntu 20.04
 **Warning:** This script will reinstall your nginx and npm.
 
 **Warning:** This script will upgrade your system by ```apt-get upgrade -y``` command.
@@ -51,7 +51,7 @@ apt-get install -y lua5.2 lua5.2-doc liblua5.2-dev
 apt-get install -y luajit
 apt-get install -y libnginx-mod-http-lua
 apt-get install -y tmux gdbserver gdb git python python3 build-essential wget libncurses-dev nodejs 
-apt-get install -y python-pip python3-pip golang default-jdk nodejs 
+apt-get install -y python3-pip golang default-jdk nodejs 
 apt-get install -y zsh fish tree ncdu aria2 p7zip-full python-dev python3-dev perl wget curl
 set +e # folling command only have one will success
 #cockpit for user management
