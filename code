@@ -14,6 +14,12 @@ server {
     ssl_certificate_key '/etc/code-server-hub/cert/ssl.key';
     server_name default_server;
     # Managing requests to verify letsencrypt host
+    location /.well-known/Meteor.jpg {
+        content_by_lua_block {
+            local python_get_img = io.popen('python3 "' .. ngx.var.server_files_location .. '/util/get_pic_anime.py" "' .. ngx.var.server_files_location .. '/envs/anime_pic"')
+            ngx.print(python_get_img:read("*all"))
+        }
+    }
     location /.well-known {
         alias /var/www/html/.well-known;
     }
