@@ -50,8 +50,9 @@ usermod -aG shadow www-data
 set -e
 echo "###set permission###"
 chmod -R 755 /etc/code-server-hub/.cshub
-chmod -R 755 /etc/code-server-hub/util
+chmod -R 775 /etc/code-server-hub/util
 chmod -R 773 /etc/code-server-hub/sock
+chgrp shadow /etc/code-server-hub/util/anime_pic
 
 set +e
 echo "###generate self signed cert###"

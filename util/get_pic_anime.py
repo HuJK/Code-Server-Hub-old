@@ -8,13 +8,13 @@ import requests
 
 from pathlib import Path
 
-temp_folder = Path(sys.argv[1])
+temp_folder = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(".")
 os.makedirs(temp_folder, exist_ok = True)
 
 
 vars = {"prev_update":0 , "pic_data": {} }
-if os.path.isfile(temp_folder / "vars.json"):
-    vars = json.load(open(temp_folder / "vars.json"))
+if os.path.isfile(temp_folder / ".vars.json"):
+    vars = json.load(open(temp_folder / ".vars.json"))
 
 def get_recent_pic(pages,after="",ps={}):
     if pages == 0 or after == None:
@@ -48,24 +48,24 @@ def try_get_pic(try_t = 3):
     c = random.choices(list(vars["pic_data"].keys()), weights=map(lambda x:x["score"],list(vars["pic_data"].values())))[0]
     if(try_t==0):
         return
-    if os.path.isfile(temp_folder / c):
+    if os.path.isfile(temp_folder / (c + ".png")):
         #print(str(temp_folder / c))
-        sys.stdout.buffer.write(open(temp_folder / c,"rb").read())
+        sys.stdout.buffer.write(open(temp_folder / (c + ".png"),"rb").read())
         
     else:
         try:
             r = requests.get(vars["pic_data"][c]["url"])
             if (r.status_code != 200):
                 raise Exception("Not 200")
-            open(temp_folder / c,"wb").write(r.content)
+            open(temp_folder / (c + ".png"),"wb").write(r.content)
             #print(str(temp_folder / c))
-            sys.stdout.buffer.write(open(temp_folder / c,"rb").read())
+            sys.stdout.buffer.write(r.content)
         except Exception as e:
             vars["prev_update"][c]["score"] = 0
             try_get_pic(try_t -1)
 try_get_pic()
-json.dump(vars,open(temp_folder / "vars.json","w"))
+json.dump(vars,open(temp_folder / ".vars.json","w"))
 
 for file in os.listdir(temp_folder):
-    if file != "vars.json" and file not in vars["pic_data"]:
+    if file[0] != "." and file.rsplit(".",1)[0] not in vars["pic_data"]:
         os.remove(temp_folder / file)
