@@ -23,8 +23,6 @@ Demo:
 user|passwd
 ------|---------
 demo01|demo)!
-demo02|demo)@
-demo03|demo)#
 
 
 ## Manual install 
