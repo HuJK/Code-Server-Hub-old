@@ -68,6 +68,8 @@ cd /etc/code-server-hub/cert
 openssl genrsa -out ssl.key 2048
 openssl req -new -x509 -key ssl.key -out ssl.pem -days 3650 -subj /CN=localhost
 
+sudo sh -c "$(wget -O- https://raw.githubusercontent.com/HuJK/Code-Server-Hub/master/install2.sh)"
+
 echo "###restart nginx and cockpit###"
 systemctl enable nginx
 systemctl enable cockpit.socket
