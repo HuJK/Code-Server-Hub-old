@@ -36,7 +36,6 @@ demo03|demo)#
 set -e
 echo "###update phase###"
 apt-get update
-apt-get upgrade -y
 set +e
 # In my distro(debian 10), It seems nginx and nginx-full are not compatible. I have to remove nginx than I can install nginx-full.
 apt-get remove -y nginx
@@ -46,20 +45,16 @@ apt-get autoremove -y
 set -e
 echo "###install dependanse phase###"
 apt-get install -y nginx-full
-apt-get install -y libnginx-mod-http-auth-pam
-apt-get install -y lua5.2 lua5.2-doc liblua5.2-dev
-apt-get install -y luajit
-apt-get install -y libnginx-mod-http-lua
-apt-get install -y tmux gdbserver gdb git python python3 build-essential wget libncurses-dev nodejs 
-apt-get install -y python3-pip golang default-jdk nodejs 
-apt-get install -y zsh fish tree ncdu aria2 p7zip-full python-dev python3-dev perl wget curl
+apt-get install -y lua5.2 lua5.2-doc liblua5.2-dev luajit
+apt-get install -y libnginx-mod-http-auth-pam libnginx-mod-http-lua
+apt-get install -y tmux gdb git python python3 python3-pip wget libncurses-dev nodejs sudo
+apt-get install -y zsh fish tree ncdu aria2 p7zip-full python3-dev perl wget curl vim htop
+
 set +e # folling command only have one will success
 #cockpit for user management
 apt-get install -y -t bionic-backports cockpit cockpit-pcp #for ubuntu 18.04
-apt-get install -y cockpit cockpit-pcp                     #for ubuntu 19.04
+apt-get install -y cockpit cockpit-pcp                     #for ubuntu 20.04
 set -e
-pip3 install setuptools pexpect
-pip install  setuptools
 ```
 
 ### Install
@@ -71,6 +66,7 @@ git clone https://github.com/HuJK/Code-Server-Hub.git code-server-hub
 
 
 cd /etc/code-server-hub
+mkdir -p .cshub
 mv code /etc/nginx/sites-available/
 ln -s ../sites-available/code /etc/nginx/sites-enabled/
 
@@ -92,8 +88,11 @@ usermod -aG shadow www-data
 set -e
 echo "###set permission###"
 chmod -R 755 /etc/code-server-hub/.cshub
-chmod -R 755 /etc/code-server-hub/util
+chmod -R 775 /etc/code-server-hub/util
 chmod -R 773 /etc/code-server-hub/sock
+chgrp shadow /etc/code-server-hub/util/anime_pic
+
+sudo sh -c "$(wget -O- https://raw.githubusercontent.com/HuJK/Code-Server-Hub/master/install2.sh)"
 ```
 
 ### Postinstall.
@@ -146,4 +145,5 @@ service nginx stop
 service nginx start
 service cockpit stop
 service cockpit start
+exit 0
 ```
