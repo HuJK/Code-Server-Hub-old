@@ -1,21 +1,15 @@
 #!/bin/bash
 set -e
-echo "###update phase###"
+#echo "###update phase###"
 apt-get update
-apt-get upgrade -y
-set +e
-# In my distro(debian 10), It seems nginx and nginx-full are not compatible. I have to remove nginx than I can install nginx-full.
-apt-get remove -y nginx
-# The install script will detect npm exist or not on the system. If exist, it will not use itself's npm
-# But in Ubuntu 19.04, npm from apt are not compatible with it. So I have to remove first, and install back later.
-apt-get autoremove -y
-set -e
+#apt-get upgrade -y
 echo "###install dependanse phase###"
+echo "Install dependances"
 apt-get install -y nginx-full
-apt-get install -y lua5.2 lua5.2-doc liblua5.2-dev luajit
-apt-get install -y libnginx-mod-http-auth-pam libnginx-mod-http-lua
-apt-get install -y tmux gdb git python python3 python3-pip wget libncurses-dev nodejs sudo
-apt-get install -y zsh fish tree ncdu aria2 p7zip-full python3-dev perl wget curl vim htop
+apt-get install -y lua5.2 lua5.2-doc liblua5.2-dev luajit libnginx-mod-http-auth-pam libnginx-mod-http-lua
+apt-get install -y tmux  wget libncurses-dev nodejs sudo curl vim htop aria2 openssl git ca-certificates
+apt-get install -y python3 python3-pip python3-dev p7zip-full 
+pip3 install certbot-dns-cloudflare
 set +e # folling command only have one will success
 #cockpit for user management
 apt-get install -y -t bionic-backports cockpit cockpit-pcp #for ubuntu 18.04
